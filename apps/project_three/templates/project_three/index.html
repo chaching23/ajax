@@ -1,0 +1,48 @@
+
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Ajax Posts</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="jquery-3.4.1.min.js"></script>
+
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+  </head>
+  <body>
+    <h1>Posts</h1>
+    <div class="posts">
+      {% for post in posts %}
+      <div class="post">
+        <p>{{post.description}}</p>
+      </div>
+      {% endfor %}
+    </div>
+    <form action="{%url 'posts' %}" method="post">
+      {% csrf_token %}
+      <input type="text" name="description" value="Add first">
+
+    <input type="submit" name="get" value="Add New Post">
+  </form>
+  </body>
+  <script>
+
+
+        $('form').submit(function(e){
+        e.preventDefault()
+        $.ajax({
+            url: '/posts/',
+            method: 'Post',
+            data: $(this).serialize(),
+            success: function(serverResponse){
+                $('.posts').html(serverResponse)
+            }
+        })
+        $(this).trigger('reset')
+
+        })
+
+  </script>
+  <!-- ********************************* -->
+</html>
